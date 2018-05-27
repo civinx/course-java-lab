@@ -1,0 +1,9 @@
+.idea
+*.iml
+out
+gen
+target/
+*.jar
+*.class
+out/
+*.swp

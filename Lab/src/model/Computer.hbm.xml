@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+  <class name="model.Computer" table="Computer" schema="lab" >
+    <composite-id mapped="true" class="model.ComputerPK">
+      <key-property name="computerId">
+        <column name="computer_id" sql-type="int(11)" />
+      </key-property>
+      <key-property name="labId">
+        <column name="lab_id" sql-type="int(11)" />
+      </key-property>
+    </composite-id>
+    <property name="computerIp">
+      <column name="computer_ip" sql-type="varchar(45)" length="45" not-null="true" />
+    </property>
+    <property name="computerLoc">
+      <column name="computer_loc" sql-type="varchar(45)" length="45" not-null="true" />
+    </property>
+    <property name="computerState">
+      <column name="computer_state" sql-type="int(11)" />
+    </property>
+  </class>
+</hibernate-mapping>
