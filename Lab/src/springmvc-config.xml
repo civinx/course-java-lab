@@ -4,7 +4,15 @@
   xmlns:mvc="http://www.springframework.org/schema/mvc"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!--<mvc:default-servlet-handler />-->
+
     <context:component-scan base-package="controller"/>
+
+    <!--<mvc:resources location="/vendor/" mapping="/vendor/**"/>-->
+    <!--<mvc:resources location="/js/" mapping="/js/**"/>-->
+    <!--<mvc:resources location="/dist/" mapping="/dist/**"/>-->
+    <!--<mvc:resources location="/less/" mapping="/less/**"/>-->
+
 
     <bean id="dataSource" class =
       "com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -47,5 +55,6 @@
             <bean class="interceptor.LoginInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
+
 
 </beans>

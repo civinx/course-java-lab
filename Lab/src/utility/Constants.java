@@ -13,4 +13,7 @@ public interface Constants {
     // SESSION
     String SESSION_USER = "SESSION_USER";
     String SESSION_ERROR = "SESSION_ERROR";
+
+    // ATTRIBUTE
+    String ATTRIBUTE_USER_LIST = "ATTRIBUTE_USER_LIST";
 }

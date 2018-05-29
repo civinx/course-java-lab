@@ -38,7 +38,7 @@ public class UserController implements Constants {
                          @RequestParam(value = "userName") String userName,
                          @RequestParam(value = "userPassword") String userPassword,
                          @RequestParam(value = "userNick") String userNick,
-                         HttpSession session) {
+                         HttpSession session) throws Exception{
         System.out.println(userNick);
         User user = new User();
         user.setUserName(userName);
@@ -50,11 +50,12 @@ public class UserController implements Constants {
         return "/login";
     }
 
+
     @RequestMapping("/login")
     private String login(Model model,
                          @RequestParam(value = "userName") String userName,
                          @RequestParam(value = "userPassword") String userPassword,
-                         HttpSession session) {
+                         HttpSession session) throws Exception {
         try {
             User user = userDAO.getUser(userName);
             if (user == null) {
@@ -70,12 +71,21 @@ public class UserController implements Constants {
             model.addAttribute(SESSION_ERROR, ex.getMessage());
             return "/login.jsp";
         }
-
     }
 
     @RequestMapping("/home")
-    private String home(Model model) {
+    private String home(Model model) throws Exception {
         return "index.jsp";
+    }
+
+    @RequestMapping("/home/user")
+    private String list(Model model) throws Exception {
+        try {
+            model.addAttribute(ATTRIBUTE_USER_LIST, userDAO.getUserList("", -1, -1));
+            return "/user.jsp";
+        } catch (Exception e) {
+            return "/error.jsp";
+        }
     }
 
 

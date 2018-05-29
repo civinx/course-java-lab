@@ -7,7 +7,7 @@ public class Test {
     String xmlPath = "springmvc-config.xml";
     ApplicationContext applicationContext = new ClassPathXmlApplicationContext(xmlPath);
 
-    private void login() {
+    private void login() throws Exception {
         IUserDAO userDAO = (IUserDAO) applicationContext.getBean("userDAO");
         User user = new User();
         user.setUserName("test1");
@@ -16,7 +16,7 @@ public class Test {
         userDAO.insert(user);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Test test = new Test();
         test.login();
     }
