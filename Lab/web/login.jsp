@@ -40,19 +40,19 @@
                         <h3 class="panel-title">Please Sign In</h3>
                     </div>
                     <div class="panel-body">
-                        <form action="login" method="post">
-                            <fieldset>
+                        <%--<form >--%>
+                            <fieldset id="login-form">
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="用户名" name="userName" type="text" autofocus>
+                                    <input class="form-control" placeholder="用户名" id="userName" name="userName" type="text" autofocus>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="密码" name="userPassword" type="password" value="">
+                                    <input class="form-control" placeholder="密码" id="userPassword" name="userPassword" type="password" value="">
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
-                                <input type="submit" value="登录" class="btn btn-lg btn-success btn-block">
+                                <input type="submit" id="login-btn" value="登录" class="btn btn-lg btn-success btn-block">
                                 <a href="register.jsp" class="btn btn-lg btn-success btn-block">注册</a>
                             </fieldset>
-                        </form>
+                        <%--</form>--%>
                     </div>
                 </div>
             </div>
@@ -70,6 +70,34 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
+
+    <script>
+        $(window).ready(function () {
+            $("#login-form").click(function() {
+                login();
+            })
+            function login() {
+                $.ajax({
+                        type: "POST",
+                        url: "login",
+                        data: $('#login-form').serialize(),
+                        success: function (result) {
+                            if (result === 'error') {
+                                return;
+                            }
+                            console.log(result)
+                            $(location).attr('href', "/home");
+                        },
+                        error:
+                            function (result, status) {
+                                console.log(result);
+                            }
+                    }
+                )
+            }
+        })
+
+    </script>
 
 </body>
 

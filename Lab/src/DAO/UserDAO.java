@@ -5,11 +5,13 @@ import model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import utility.Constants;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
 import java.util.List;
 
-public class UserDAO implements IUserDAO  {
+public class UserDAO implements IUserDAO, Constants {
     @Resource(name = "sessionFactory")
     private SessionFactory sessionFactory;
 
@@ -29,7 +31,12 @@ public class UserDAO implements IUserDAO  {
 
     @Override
     public void delete(int userId) {
-
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, userId);
+        user.setUserState(USER_STATE_DELETE);
+        session.update(user);
+        session.getTransaction().commit();
     }
 
     @Override
@@ -58,15 +65,18 @@ public class UserDAO implements IUserDAO  {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         String hql = "from User ";
-//        if (!userNick.equals("")) {
-//            hql += " and userNick = :userNick";
-//        }
-//        if (userType != -1) {
-//            hql += " and userType = :userType";
-//        }
-//        if (userState != -1) {
-//            hql += " and userState = :userState";
-//        }
+        if (!userNick.equals("") || userState != -1 || userType != -1) {
+            hql += "where ";
+        }
+        if (!userNick.equals("")) {
+            hql += " and userNick = :userNick";
+        }
+        if (userType != -1) {
+            hql += " and userType = :userType";
+        }
+        if (userState != -1) {
+            hql += " and userState = :userState";
+        }
         Query query = session.createQuery(hql);
         if (!userNick.equals("")) {
             query.setParameter("userNick", userNick);

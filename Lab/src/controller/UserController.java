@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import utility.Constants;
@@ -51,11 +52,12 @@ public class UserController implements Constants {
     }
 
 
+    @ResponseBody
     @RequestMapping("/login")
-    private String login(Model model,
-                         @RequestParam(value = "userName") String userName,
+    private String login(@RequestParam(value = "userName") String userName,
                          @RequestParam(value = "userPassword") String userPassword,
                          HttpSession session) throws Exception {
+        System.out.println("a~~~`");
         try {
             User user = userDAO.getUser(userName);
             if (user == null) {
@@ -68,10 +70,10 @@ public class UserController implements Constants {
             System.out.println(user);
             return "/home";
         } catch (Exception ex) {
-            model.addAttribute(SESSION_ERROR, ex.getMessage());
-            return "/login.jsp";
+            return "error";
         }
     }
+
 
     @RequestMapping("/home")
     private String home(Model model) throws Exception {
@@ -84,6 +86,17 @@ public class UserController implements Constants {
             model.addAttribute(ATTRIBUTE_USER_LIST, userDAO.getUserList("", -1, -1));
             return "/user.jsp";
         } catch (Exception e) {
+            return "/error.jsp";
+        }
+    }
+
+    @RequestMapping("/home/user/delete")
+    private String delete(Model model,
+                          @RequestParam(value = "userId") int userId) {
+        try {
+            userDAO.delete(userId);
+            return "/home/user";
+        } catch (Exception ex) {
             return "/error.jsp";
         }
     }

@@ -405,6 +405,7 @@
                                 <th>用户昵称</th>
                                 <th>用户类型</th>
                                 <th>用户状态</th>
+                                <th>删除操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -417,9 +418,10 @@
                                         <td><%=user.getUserId()%></td>
                                         <td><%=user.getUserName()%></td>
                                         <td><%=user.getUserNick()%></td>
-                                        <td><%=user.getUserType()%></td>
-                                        <td><%=user.getUserState()%></td>
-                                        <td class="center">4</td>
+                                        <td><%=Constants.MAP_USER_TYPE[user.getUserType()]%></td>
+                                        <td><%=Constants.MAP_USER_STATE[user.getUserState()]%></td>
+                                        <td><button type="button" class="btn btn-danger"
+                                                    onclick="window.location.href='/home/user/delete?userId=<%=user.getUserId()%>'"> 删除 </button></td>
                                     </tr>
                             <%}%>
 
