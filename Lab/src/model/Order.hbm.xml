@@ -23,5 +23,8 @@
     <property name="orderEndTime">
       <column name="order_end_time" sql-type="datetime" />
     </property>
+    <property name="orderState">
+      <column name="order_state" sql-type="int(11)" not-null="true" />
+    </property>
   </class>
 </hibernate-mapping>

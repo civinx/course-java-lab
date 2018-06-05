@@ -40,7 +40,7 @@
                         <h3 class="panel-title">Please Sign In</h3>
                     </div>
                     <div class="panel-body">
-                        <form action="register" method="post">
+                        <form action="register_action" method="post">
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="用户名" name="userName" type="text" autofocus>

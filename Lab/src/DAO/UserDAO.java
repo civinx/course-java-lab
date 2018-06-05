@@ -8,7 +8,6 @@ import org.hibernate.query.Query;
 import utility.Constants;
 
 import javax.annotation.Resource;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class UserDAO implements IUserDAO, Constants {
@@ -17,7 +16,7 @@ public class UserDAO implements IUserDAO, Constants {
 
 
     @Override
-    public void insert(User user) {
+    public void add(User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(user);
@@ -34,7 +33,7 @@ public class UserDAO implements IUserDAO, Constants {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         User user = session.get(User.class, userId);
-        user.setUserState(USER_STATE_DELETE);
+        user.setUserState(STATE_DELETE);
         session.update(user);
         session.getTransaction().commit();
     }
@@ -45,7 +44,7 @@ public class UserDAO implements IUserDAO, Constants {
     }
 
     @Override
-    public synchronized User getUser(String userName) {
+    public synchronized User query(String userName) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         String hql = "from User where userName = ?";
@@ -61,7 +60,7 @@ public class UserDAO implements IUserDAO, Constants {
     上述情况不查
      */
     @Override
-    public List getUserList(String userNick, int userType, int userState) throws Exception {
+    public List queryList(String userNick, int userType, int userState) throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         String hql = "from User ";
@@ -92,8 +91,18 @@ public class UserDAO implements IUserDAO, Constants {
         return result;
     }
 
-//    public static void main(String[] args) throws Exception{
-//        List<User> test = userDAO.getUserList("", -1, -1);
+    @Override
+    public User query(int userId) throws Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String hql = "from User where userId = ?";
+        User user = (User) session.createQuery(hql).setParameter(0, userId).uniqueResult();
+        System.out.println(user);
+        return user;
+    }
+
+    //    public static void main(String[] args) throws Exception{
+//        List<User> test = userDAO.queryList("", -1, -1);
 //        for (User user : test) {
 //            System.out.println(user.getUserName());
 //        }

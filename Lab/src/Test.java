@@ -13,7 +13,7 @@ public class Test {
         user.setUserName("test1");
         user.setUserPassword("test");
         user.setUserNick("test");
-        userDAO.insert(user);
+        userDAO.add(user);
     }
 
     public static void main(String[] args) throws Exception {

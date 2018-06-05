@@ -278,10 +278,10 @@
                             <a href="/home/user"><i class="fa fa-user fa-fw"></i> 用户</a>
                         </li>
                         <li>
-                            <a href="lab.jsp"><i class="fa fa-building fa-fw"></i> 实验室</a>
+                            <a href="/home/lab"><i class="fa fa-building fa-fw"></i> 实验室</a>
                         </li>
                         <li>
-                            <a href="index.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="/home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
@@ -362,7 +362,7 @@
                                     <a href="blank.jsp">Blank Page</a>
                                 </li>
                                 <li>
-                                    <a href="login.jsp">Login Page</a>
+                                    <a href="/login">Login Page</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

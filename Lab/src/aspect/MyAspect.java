@@ -1,6 +1,5 @@
 package aspect;
 
-import DAO.LogDAO;
 import IDAO.ILogDAO;
 import model.Log;
 import model.User;
@@ -49,7 +48,7 @@ public class MyAspect implements Constants {
             log.setLogType("normal");
         }
 
-        logDAO.insert(log);
+//        logDAO.add(log);
         Object obj = proceedingJoinPoint.proceed();
         return obj;
     }

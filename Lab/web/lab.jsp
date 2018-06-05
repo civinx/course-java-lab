@@ -1,4 +1,6 @@
-<%--
+<%@ page import="model.Lab" %>
+<%@ page import="java.util.List" %>
+<%@ page import="utility.Constants" %><%--
   Created by IntelliJ IDEA.
   User: czf
   Date: 2018/5/29
@@ -18,22 +20,22 @@
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
     <!-- DataTables CSS -->
-    <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
 
     <!-- DataTables Responsive CSS -->
-    <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+    <link href="/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -57,7 +59,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.index.jsp">SB Admin v2.0</a>
+            <a class="navbar-brand" href="/home">SB Admin v2.0</a>
         </div>
         <!-- /.navbar-header -->
 
@@ -286,7 +288,7 @@
                         <!-- /input-group -->
                     </li>
                     <li>
-                        <a href="index.index.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        <a href="/home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
@@ -400,17 +402,31 @@
                             <tr>
                                 <th>实验室ID</th>
                                 <th>实验室名称</th>
+                                <th>实验室状态</th>
                                 <th>实验室人员管理</th>
                                 <th>实验室电脑管理</th>
+                                <th>删除</th>
                             </tr>
                             </thead>
                             <tbody>
+                            <%
+                                List<Lab> labList = (List) request.getAttribute(Constants.ATTRIBUTE_LAB_LIST);
+                                if (labList == null) return;
+                                for (Lab lab : labList) {
+                            %>
                             <tr class="odd gradeX">
-                                <td>Trident</td>
-                                <td>Internet Explorer 4.0</td>
-                                <td>Win 95+</td>
-                                <td class="center">4</td>
+                                <td><%=lab.getLabId()%></td>
+                                <td><%=lab.getLabName()%></td>
+                                <td><%=Constants.MAP_STATE[lab.getLabState()]%></td>
+
+                                <td><button type="button" class="btn btn-primary"
+                                            onclick="window.location.href='/home/lab/member?labId=<%=lab.getLabId()%>'"> 成员管理 </button></td>
+                                <td><button type="button" class="btn btn-primary"
+                                            onclick="window.location.href='/home/lab/computer?labId=<%=lab.getLabId()%>'"> 电脑管理 </button></td>
+                                <td><button type="button" class="btn btn-danger"
+                                            onclick="window.location.href='/home/lab/delete?labId=<%=lab.getLabId()%>'"> 删除 </button></td>
                             </tr>
+                            <%}%>
 
 
                             </tbody>
@@ -419,7 +435,8 @@
                         <div class="well">
                             <%--<h4>DataTables Usage Information</h4>--%>
                             <%--<p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>--%>
-                            <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>
+                            <a class="btn btn-default btn-lg btn-block" target="_blank" href="/home/lab/add">添加实验室</a>
+
                         </div>
                     </div>
                     <!-- /.panel-body -->

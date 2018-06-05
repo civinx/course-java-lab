@@ -42,6 +42,7 @@
     <bean id="myAspect" class="aspect.MyAspect"/>
     <bean id="userDAO" class="DAO.UserDAO"/>
     <bean id="logDAO" class="DAO.LogDAO"/>
+    <bean id="labDAO" class="DAO.LabDAO"/>
     <bean id="exceptionLog" class="DAO.ExceptionLog"/>
     <aop:config>
         <aop:aspect ref="myAspect">

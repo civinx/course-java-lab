@@ -50,7 +50,7 @@
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
                                 <input type="submit" id="login-btn" value="登录" class="btn btn-lg btn-success btn-block">
-                                <a href="register.jsp" class="btn btn-lg btn-success btn-block">注册</a>
+                                <a href="/register" class="btn btn-lg btn-success btn-block">注册</a>
                             </fieldset>
                         <%--</form>--%>
                     </div>
@@ -79,7 +79,7 @@
             function login() {
                 $.ajax({
                         type: "POST",
-                        url: "login",
+                        url: "login_action",
                         data: $('#login-form').serialize(),
                         success: function (result) {
                             if (result === 'error') {

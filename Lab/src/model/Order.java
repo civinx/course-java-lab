@@ -10,6 +10,7 @@ public class Order {
     private int computerId;
     private Timestamp orderStartTime;
     private Timestamp orderEndTime;
+    private Integer orderState;
 
     public int getOrderId() {
         return orderId;
@@ -59,6 +60,14 @@ public class Order {
         this.orderEndTime = orderEndTime;
     }
 
+    public Integer getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(Integer orderState) {
+        this.orderState = orderState;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,12 +78,13 @@ public class Order {
                 labId == order.labId &&
                 computerId == order.computerId &&
                 Objects.equals(orderStartTime, order.orderStartTime) &&
-                Objects.equals(orderEndTime, order.orderEndTime);
+                Objects.equals(orderEndTime, order.orderEndTime) &&
+                Objects.equals(orderState, order.orderState);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(orderId, userId, labId, computerId, orderStartTime, orderEndTime);
+        return Objects.hash(orderId, userId, labId, computerId, orderStartTime, orderEndTime, orderState);
     }
 }

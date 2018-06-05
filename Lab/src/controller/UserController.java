@@ -1,6 +1,5 @@
 package controller;
 
-import DAO.ExceptionLog;
 import IDAO.IExceptionLog;
 import IDAO.IUserDAO;
 import model.User;
@@ -9,13 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import utility.Constants;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -34,8 +29,8 @@ public class UserController implements Constants {
     }
 
 
-    @RequestMapping("/register")
-    private String register(Model model,
+    @RequestMapping("/register_action")
+    private String register_action(Model model,
                          @RequestParam(value = "userName") String userName,
                          @RequestParam(value = "userPassword") String userPassword,
                          @RequestParam(value = "userNick") String userNick,
@@ -45,21 +40,28 @@ public class UserController implements Constants {
         user.setUserName(userName);
         user.setUserPassword(userPassword);
         user.setUserNick(userNick);
-        user.setUserState(USER_STATE_AVAILABLE);
+        user.setUserState(STATE_AVAILABLE);
         user.setUserType(USER_TYPE_STUDENT);
-        userDAO.insert(user);
+        userDAO.add(user);
         return "/login";
     }
 
+    @RequestMapping("/register")
+    private String register(Model model) throws Exception{
+        return "/register.jsp";
+    }
+
+
+
 
     @ResponseBody
-    @RequestMapping("/login")
-    private String login(@RequestParam(value = "userName") String userName,
+    @RequestMapping("/login_action")
+    private String login_action(@RequestParam(value = "userName") String userName,
                          @RequestParam(value = "userPassword") String userPassword,
                          HttpSession session) throws Exception {
         System.out.println("a~~~`");
         try {
-            User user = userDAO.getUser(userName);
+            User user = userDAO.query(userName);
             if (user == null) {
                 exceptionLog.insert("用户名不存在");
             }
@@ -74,6 +76,11 @@ public class UserController implements Constants {
         }
     }
 
+    @RequestMapping("/login")
+    private String login(Model model) throws Exception{
+        return "/login.jsp";
+    }
+
 
     @RequestMapping("/home")
     private String home(Model model) throws Exception {
@@ -83,7 +90,7 @@ public class UserController implements Constants {
     @RequestMapping("/home/user")
     private String list(Model model) throws Exception {
         try {
-            model.addAttribute(ATTRIBUTE_USER_LIST, userDAO.getUserList("", -1, -1));
+            model.addAttribute(ATTRIBUTE_USER_LIST, userDAO.queryList("", -1, -1));
             return "/user.jsp";
         } catch (Exception e) {
             return "/error.jsp";

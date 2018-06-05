@@ -12,7 +12,7 @@ public class LogDAO implements ILogDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public void insert(Log log) {
+    public void add(Log log) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(log);
