@@ -60,26 +60,29 @@ public class LabDAO implements ILabDAO, Constants {
     }
 
     @Override
-    public List queryList(String labName, int labState) throws Exception {
+    public List queryList(String labName, int labState, int labGate) throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String hql = "from Lab ";
-        if (!labName.equals("") || labState != -1) {
-            hql += "where ";
-        }
+        String hql = "from Lab where 1 = 1";
         if (!labName.equals("")) {
             hql += " and labName = :labName";
         }
         if (labState != -1) {
             hql += " and labState = :labState";
         }
-
+        if (labGate != -1) {
+            hql += " and labGate = :labGate";
+        }
         Query query = session.createQuery(hql);
+
         if (!labName.equals("")) {
             query.setParameter("labName", labName);
         }
         if (labState != -1) {
             query.setParameter("labState", labState);
+        }
+        if (labGate != -1) {
+            query.setParameter("labGate", labGate);
         }
 
         List<Lab> result = query.list();

@@ -46,6 +46,9 @@
                         <div class="form-group">
                             <input class="form-control" placeholder="实验室名称" id="labName" name="labName" type="text" autofocus>
                         </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="实验室网段(0~255)" id="labGate" name="labGate" type="text" autofocus>
+                        </div>
                         <input id="add-btn" value="添加" class="btn btn-lg btn-success btn-block">
                     </fieldset>
                     <%--</form>--%>

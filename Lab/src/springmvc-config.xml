@@ -44,6 +44,8 @@
     <bean id="logDAO" class="DAO.LogDAO"/>
     <bean id="labDAO" class="DAO.LabDAO"/>
     <bean id="exceptionLog" class="DAO.ExceptionLog"/>
+    <bean id="computerDAO" class="DAO.ComputerDAO"/>
+
     <aop:config>
         <aop:aspect ref="myAspect">
             <aop:pointcut id="myPointCut" expression="(execution(* IDAO.*.*(..)) and !execution(* IDAO.ILogDAO.*(..)))"/>

@@ -6,6 +6,7 @@ public class Lab {
     private int labId;
     private String labName;
     private int labState;
+    private int labGate;
 
     public int getLabId() {
         return labId;
@@ -31,19 +32,28 @@ public class Lab {
         this.labState = labState;
     }
 
+    public int getLabGate() {
+        return labGate;
+    }
+
+    public void setLabGate(int labGate) {
+        this.labGate = labGate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lab lab = (Lab) o;
         return labId == lab.labId &&
-                Objects.equals(labName, lab.labName) &&
-                Objects.equals(labState, lab.labState);
+                labState == lab.labState &&
+                labGate == lab.labGate &&
+                Objects.equals(labName, lab.labName);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(labId, labName, labState);
+        return Objects.hash(labId, labName, labState, labGate);
     }
 }

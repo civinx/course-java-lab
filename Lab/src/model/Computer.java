@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Computer {
+public class Computer implements Serializable {
     private int computerId;
     private int labId;
     private String computerIp;

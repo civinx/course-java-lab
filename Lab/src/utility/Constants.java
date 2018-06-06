@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface Constants {
+
+    String IP_GATE = "10.66.";
+
     // USER_TYPE
     int USER_TYPE_VISTOR = 0;
     int USER_TYPE_STUDENT = 1;
@@ -29,5 +32,11 @@ public interface Constants {
     String ATTRIBUTE_USER_OPTION = "ATTRIBUTE_USER_OPTION";
 
     // ALERT_INFO
-    String ALERT_LAB_NAME_USED = "ALERT_LAB_NAME_USED";
+    String ALERT_LAB_NAME_USED = "该实验室名称已被使用";
+    String ALERT_LAB_GATE_OUT_OF_RANGE = "ALERT_LAB_GATE_ERROR";
+    String ALERT_LAB_GATE_USED = "ALERT_LAB_GATE_USED";
+    String ALERT_COMPUTER_IP_USED = "该IP已被使用";
+    String ALERT_COMPUTER_IP_OUT_OF_RANGE = "ALERT_COMPUTER_IP_OUT_OF_RANGE";
+    String ALERT_COMPUTER_ID_USED = "ALERT_COMPUTER_ID_USED";
+
 }

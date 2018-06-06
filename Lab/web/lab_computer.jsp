@@ -1,7 +1,8 @@
 <%@ page import="model.Lab" %>
 <%@ page import="java.util.List" %>
 <%@ page import="utility.Constants" %>
-<%@ page import="model.User" %><%--
+<%@ page import="model.User" %>
+<%@ page import="model.Computer" %><%--
   Created by IntelliJ IDEA.
   User: czf
   Date: 2018/5/29
@@ -404,23 +405,30 @@
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
-                                <th>人员序号</th>
-                                <th>人员名称</th>
+                                <th>序号</th>
+                                <th>电脑编号</th>
+                                <th>电脑IP</th>
+                                <th>电脑位置</th>
+                                <th>电脑状态</th>
                                 <th>删除</th>
                             </tr>
                             </thead>
                             <tbody>
                             <%
-                                List<User> userList = (List) request.getAttribute(Constants.ATTRIBUTE_USER_LIST);
-                                if (userList == null) return;
-                                for (int i = 0; i < userList.size(); i ++) {
+                                List<Computer> computerList = (List) request.getAttribute(Constants.ATTRIBUTE_COMPUTER_LIST);
+                                if (computerList == null) return;;
+                                for (int i = 0; i < computerList.size(); i ++) {
+                                    Computer computer = computerList.get(i);
                             %>
                             <tr class="odd gradeX">
                                 <td><%=i+1%></td>
-                                <td><%=userList.get(i).getUserNick()%></td>
+                                <td><%=computer.getLabId()+"-"+computer.getComputerId()%></td>
+                                <td><%=computer.getComputerIp()%></td>
+                                <td><%=computer.getComputerLoc()%></td>
+                                <td><%=Constants.MAP_STATE[computer.getComputerState()]%></td>
                                 <td><button type="button" class="btn btn-danger"
-                                            onclick="window.location.href='/home/lab/member/delete' +
-                                                    '?labId=<%=lab.getLabId()%>&userId=<%=userList.get(i).getUserId()%>'"> 删除 </button></td>
+                                            onclick="window.location.href='/home/lab/computer/delete' +
+                                                    '?labId=<%=lab.getLabId()%>&computerId=<%=computer.getComputerId()%>'"> 删除 </button></td>
                             </tr>
                             <%}%>
 
@@ -428,12 +436,24 @@
                             </tbody>
                         </table>
                         <!-- /.table-responsive -->
-                        <div class="well">
-                            <%--<h4>DataTables Usage Information</h4>--%>
-                            <%--<p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>--%>
-                            <a class="btn btn-default btn-lg btn-block" target="_blank" href="/home/lab/member/add?labId=<%=lab.getLabId()%>">添加成员</a>
+                        <fieldset id="add-form">
+                            <%--style="display: none"--%>
+                            <div class="form-group">
+                                <input class="form-control" style="display: none" id="labId" name="labId" type="text" value="<%=request.getParameter("labId")%>">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="电脑ID" id="computerId" name="computerId" type="text" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="电脑IP" id="computerIpLast" name="computerIpLast" type="text" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="电脑位置" id="computerLoc" name="computerLoc" type="text" autofocus>
+                            </div>
 
-                        </div>
+                            <input id="add-btn" value="添加" class="btn btn-lg btn-success btn-block">
+                        </fieldset>
+
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -449,29 +469,49 @@
 <!-- /#wrapper -->
 
 <!-- jQuery -->
-<script src="vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- Metis Menu Plugin JavaScript -->
-<script src="vendor/metisMenu/metisMenu.min.js"></script>
+<script src="/vendor/metisMenu/metisMenu.min.js"></script>
 
 <!-- DataTables JavaScript -->
-<script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-<script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
+<script src="/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+<script src="/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="dist/js/sb-admin-2.js"></script>
+<script src="/dist/js/sb-admin-2.js"></script>
 
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
+    $(window).ready(function () {
+        $("#add-btn").click(function() {
+            add();
         });
-    });
+        function add() {
+            $.ajax({
+                    type: "POST",
+                    url: "/home/lab/computer/add_action",
+                    data: $('#add-form').serialize(),
+                    success: function (result) {
+                        if (result !== 'success') {
+                            alert(result);
+                            return;
+                        }
+                        $(location).attr('href', "/home/lab/computer?labId=" + <%=lab.getLabName()%>);
+                    },
+                    error:
+                        function (result, status) {
+                            console.log(result);
+                        }
+                }
+            )
+        }
+    })
+
 </script>
 
 </body>

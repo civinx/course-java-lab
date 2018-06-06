@@ -403,6 +403,7 @@
                                 <th>实验室ID</th>
                                 <th>实验室名称</th>
                                 <th>实验室状态</th>
+                                <th>实验室网段</th>
                                 <th>实验室人员管理</th>
                                 <th>实验室电脑管理</th>
                                 <th>删除</th>
@@ -418,7 +419,7 @@
                                 <td><%=lab.getLabId()%></td>
                                 <td><%=lab.getLabName()%></td>
                                 <td><%=Constants.MAP_STATE[lab.getLabState()]%></td>
-
+                                <td><%=Constants.IP_GATE + lab.getLabGate() + ".0~255"%></td>
                                 <td><button type="button" class="btn btn-primary"
                                             onclick="window.location.href='/home/lab/member?labId=<%=lab.getLabId()%>'"> 成员管理 </button></td>
                                 <td><button type="button" class="btn btn-primary"

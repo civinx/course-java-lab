@@ -1,6 +1,5 @@
 package IDAO;
 
-import model.Lab;
 import model.User;
 
 import java.util.List;

@@ -5,7 +5,8 @@
 <hibernate-mapping>
 
   <class name="model.Computer" table="Computer" schema="lab" >
-    <composite-id mapped="true" class="model.ComputerPK">
+    <!--mapped="true" class="model.ComputerPK"-->
+    <composite-id>
       <key-property name="computerId">
         <column name="computer_id" sql-type="int(11)" />
       </key-property>

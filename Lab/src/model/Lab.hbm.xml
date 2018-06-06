@@ -14,5 +14,8 @@
     <property name="labState">
       <column name="lab_state" sql-type="int(11)" not-null="true" />
     </property>
+    <property name="labGate">
+      <column name="lab_gate" sql-type="int(11)" not-null="true" />
+    </property>
   </class>
 </hibernate-mapping>

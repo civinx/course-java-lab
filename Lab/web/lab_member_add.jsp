@@ -44,7 +44,7 @@
                     <h3 class="panel-title">Please Sign In</h3>
                 </div>
                 <div class="panel-body">
-                    <form method="get" action="/home/lab/member_add_action">
+                    <form method="get" action="/home/lab/member/add_action">
                         <fieldset id="add-form">
                             <div class="form-group">
                                 <%--style="display: none"--%>

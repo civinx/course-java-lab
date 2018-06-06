@@ -56,9 +56,10 @@ public class UserController implements Constants {
 
     @ResponseBody
     @RequestMapping("/login_action")
-    private String login_action(@RequestParam(value = "userName") String userName,
-                         @RequestParam(value = "userPassword") String userPassword,
-                         HttpSession session) throws Exception {
+    private String login_action(
+                                @RequestParam(value = "userName") String userName,
+                                @RequestParam(value = "userPassword") String userPassword,
+                                HttpSession session) throws Exception {
         System.out.println("a~~~`");
         try {
             User user = userDAO.query(userName);

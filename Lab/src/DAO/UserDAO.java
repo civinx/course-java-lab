@@ -63,10 +63,7 @@ public class UserDAO implements IUserDAO, Constants {
     public List queryList(String userNick, int userType, int userState) throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String hql = "from User ";
-        if (!userNick.equals("") || userState != -1 || userType != -1) {
-            hql += "where ";
-        }
+        String hql = "from User where 1 = 1";
         if (!userNick.equals("")) {
             hql += " and userNick = :userNick";
         }
@@ -101,10 +98,5 @@ public class UserDAO implements IUserDAO, Constants {
         return user;
     }
 
-    //    public static void main(String[] args) throws Exception{
-//        List<User> test = userDAO.queryList("", -1, -1);
-//        for (User user : test) {
-//            System.out.println(user.getUserName());
-//        }
-//    }
+
 }
