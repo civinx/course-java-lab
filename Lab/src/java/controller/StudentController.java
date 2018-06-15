@@ -2,9 +2,13 @@ package controller;
 
 import IDAO.IComputerDAO;
 import IDAO.ILabDAO;
+import IDAO.IRecordDAO;
 import IDAO.IUserDAO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exception.BaseExceptionHandleAction;
+import exception.BusinessException;
+import model.Computer;
+import model.Record;
 import model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +24,7 @@ import utility.Tools;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
 import java.util.Map;
 
 @Controller
@@ -32,6 +37,9 @@ public class StudentController extends BaseExceptionHandleAction implements Cons
 
     @Resource(name = "computerDAO")
     private IComputerDAO computerDAO;
+
+    @Resource(name = "recordDAO")
+    private IRecordDAO recordDAO;
 
     @RequestMapping("/home/student/lab")
     private String student_lab(Model model) throws Exception {
@@ -56,9 +64,50 @@ public class StudentController extends BaseExceptionHandleAction implements Cons
         System.out.println(requestJson);
         ObjectMapper mapper = new ObjectMapper();
         Map map = mapper.readValue(requestJson, Map.class);
-        int computerId = Integer.valueOf((String) map.get("computerId"));
-        System.out.println(computerId);
+        String computerIp = (String) map.get("computerIp");
+
+        Computer computer = computerDAO.query(computerIp);
+        User user = (User)request.getSession().getAttribute(SESSION_USER);
+
+        if (computer.getComputerState() != STATE_AVAILABLE) {
+            throw new BusinessException(ALERT_COMPUTER_STATE_NOT_AVAILABLE);
+        }
+        if (recordDAO.query(user.getUserId()) != null) {
+            throw new BusinessException(ALERT_COMPUTER_USER_ALREADY_ONLINE);
+        }
+
+        computer.setUserId(user.getUserId());
+        computer.setComputerState(STATE_USED);
+        computerDAO.update(computer);
+
+        Record record = new Record();
+        record.setComputerId(computer.getComputerId());
+        record.setLabId(computer.getLabId());
+        record.setUserId(user.getUserId());
+        record.setRecordStartTime(new Timestamp(System.currentTimeMillis()));
+        record.setRecordEndTime(null);
+        recordDAO.insert(record);
+
         return Tools.creteJasonString(CODE_SUCCESS);
     }
 
+    @RequestMapping("/home/student/computer/end")
+    @ResponseBody
+    private String studetn_end(@RequestBody String requestJson, HttpServletRequest request) throws Exception {
+        System.out.println(requestJson);
+        ObjectMapper mapper = new ObjectMapper();
+        Map map = mapper.readValue(requestJson, Map.class);
+        String computerIp = (String) map.get("computerIp");
+        Computer computer = computerDAO.query(computerIp);
+
+        computer.setUserId(0);
+        computer.setComputerState(STATE_AVAILABLE);
+        computerDAO.update(computer);
+
+        User user = (User)request.getSession().getAttribute(SESSION_USER);
+        Record record = recordDAO.query(user.getUserId());
+        record.setRecordEndTime(new Timestamp(System.currentTimeMillis()));
+        recordDAO.update(record);
+        return Tools.creteJasonString(CODE_SUCCESS);
+    }
 }

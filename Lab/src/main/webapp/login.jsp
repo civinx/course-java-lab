@@ -83,8 +83,7 @@
                         data: $('#login-form').serialize(),
                         dataType: "json",
                         success: function (result) {
-                            if (result.code !== 'SUCCESS') {
-                                console.log(result.code)
+                            if (result.success !== true) {
                                 alert(result.msg);
                                 return;
                             }

@@ -45,6 +45,7 @@
     <bean id="labDAO" class="DAO.LabDAO"/>
     <bean id="exceptionLog" class="DAO.ExceptionLog"/>
     <bean id="computerDAO" class="DAO.ComputerDAO"/>
+    <bean id="recordDAO" class="DAO.RecordDAO"/>
 
 
 

@@ -77,4 +77,13 @@ public class ComputerDAO implements IComputerDAO, Constants {
         session.close();
         return computer;
     }
+
+    @Override
+    public void update(Computer computer) throws Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.update(computer);
+        session.getTransaction().commit();
+        session.close();
+    }
 }

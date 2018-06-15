@@ -338,6 +338,7 @@
                             <tbody>
                             <%
                                 List<Computer> computerList = (List) request.getAttribute(Constants.ATTRIBUTE_COMPUTER_LIST);
+                                User user = (User) request.getSession().getAttribute(Constants.SESSION_USER);
                                 if (computerList == null) return;;
                                 for (int i = 0; i < computerList.size(); i ++) {
                                     Computer computer = (Computer) computerList.get(i);
@@ -348,13 +349,15 @@
                                 <td><%=computer.getComputerIp()%></td>
                                 <td><%=computer.getComputerLoc()%></td>
                                 <td><%=Constants.MAP_STATE[computer.getComputerState()]%></td>
-                                <%
-                                    if (computer.getComputerState() == Constants.STATE_USED) {
-                                %>
-                                    <td><button type="button" class="btn btn-primary disabled"> 已被使用 </button></td>
+
+                                <% if (computer.getComputerState() == Constants.STATE_USED && computer.getUserId() != user.getUserId()) {%>
+                                    <td><button type="button" class="btn btn-danger disabled"> 已被使用 </button></td>
+                                <%} else if (computer.getComputerState() == Constants.STATE_USED && computer.getUserId() == user.getUserId()) {%>
+                                    <td><button id="<%="end-btn" + (i+1)%>" value="<%=computer.getComputerIp()%>" type="button" class="btn btn-warning"> 下机 </button></td>
                                 <%} else { %>
-                                    <td><button id="<%="add-btn" + (i+1)%>" value="<%=computer.getComputerId()%>" name="add-button" type="button" class="btn btn-primary"> 开始上机 </button></td>
+                                    <td><button id="<%="start-btn" + (i+1)%>" value="<%=computer.getComputerIp()%>" type="button" class="btn btn-primary"> 开始上机 </button></td>
                                 <%}%>
+
                             </tr>
                             <%}%>
 
@@ -398,24 +401,52 @@
 <script>
     $(window).ready(function () {
         for (var i = 0; i < <%=computerList.size()%>; i ++) {
-            $("#add-btn"+(i+1)).click(function() {
-                alert(add($(this).attr("value")));
-                add($(this).attr("value"));
+            $("#start-btn"+(i+1)).click(function() {
+                start($(this).attr("value"));
+            });
+            $("#end-btn"+(i+1)).click(function() {
+                end($(this).attr("value"));
             });
         }
 
-        function add(computerId) {
-            var data = {"computerId": computerId};
+        function start(computerIp) {
+            var data = {"computerIp": computerIp};
             $.ajax({
                     type: "POST",
                     url: "/home/student/computer/start",
-                    contentType: "application/json", //必须有
+                    contentType: "application/json",
                     data: JSON.stringify(data),
+                    dataType: "json",
                     success: function (result) {
-                        if (result.code !== 'SUCCESS') {
-                            console.log(result.code)
+                        if (result.success !== true) {
                             alert(result.msg);
+                            return;
                         }
+                        $(location).attr('href', "/home/student/computer?labId=" + <%=lab.getLabId()%>);
+
+                    },
+                    error:
+                        function (result, status) {
+                            console.log(result);
+                        }
+                }
+            )
+        }
+
+        function end(computerIp) {
+            var data = {"computerIp": computerIp};
+            $.ajax({
+                    type: "POST",
+                    url: "/home/student/computer/end",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.success !== true) {
+                            alert(result.msg);
+                            return;
+                        }
+                        $(location).attr('href', "/home/student/computer?labId=" + <%=lab.getLabId()%>);
                     },
                     error:
                         function (result, status) {

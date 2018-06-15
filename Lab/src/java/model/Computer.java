@@ -9,6 +9,7 @@ public class Computer implements Serializable {
     private String computerIp;
     private String computerLoc;
     private int computerState;
+    private int userId;
 
     public int getComputerId() {
         return computerId;
@@ -48,6 +49,14 @@ public class Computer implements Serializable {
 
     public void setComputerState(int computerState) {
         this.computerState = computerState;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override

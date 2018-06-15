@@ -27,7 +27,7 @@
         <mapping resource="model/LabUser.hbm.xml" />
         <mapping resource="model/Log.hbm.xml" />
         <!--<mapping resource="model/Order.hbm.xml" />-->
-        <!--<mapping resource="model/Record.hbm.xml" />-->
+        <mapping resource="model/Record.hbm.xml" />
         <mapping resource="model/User.hbm.xml" />
 
     </session-factory>

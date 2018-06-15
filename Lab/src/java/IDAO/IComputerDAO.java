@@ -11,4 +11,6 @@ public interface IComputerDAO {
     List queryList(int labId) throws Exception;
     Computer query(String computerIp) throws Exception;
     Computer query(int labId, int computerId) throws Exception;
+    void update(Computer computer) throws Exception;
+
 }

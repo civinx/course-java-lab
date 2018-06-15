@@ -23,5 +23,8 @@
     <property name="computerState">
       <column name="computer_state" sql-type="int(11)" />
     </property>
+    <property name="userId">
+      <column name="user_id" sql-type="int(11)" />
+    </property>
   </class>
 </hibernate-mapping>
