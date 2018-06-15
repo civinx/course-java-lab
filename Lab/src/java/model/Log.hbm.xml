@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+  <class name="model.Log" table="Log" schema="lab" >
+    <id name="logId">
+      <column name="log_id" sql-type="int(11)" />
+    </id>
+    <property name="userId">
+      <column name="user_id" sql-type="int(11)" />
+    </property>
+    <property name="logAction">
+      <column name="log_action" sql-type="varchar(200)" length="200" not-null="true" />
+    </property>
+    <property name="logTime">
+      <column name="log_time" sql-type="datetime" not-null="true" />
+    </property>
+    <property name="logType">
+      <column name="log_type" sql-type="varchar(45)" length="45" not-null="true" />
+    </property>
+  </class>
+</hibernate-mapping>
