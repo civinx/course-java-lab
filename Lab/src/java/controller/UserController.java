@@ -2,11 +2,13 @@ package controller;
 
 import IDAO.IExceptionLog;
 import IDAO.IUserDAO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import exception.BaseExceptionHandleAction;
 import exception.BusinessException;
 import model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,7 +16,9 @@ import utility.Constants;
 import utility.Tools;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 public class UserController extends BaseExceptionHandleAction implements Constants {
@@ -32,21 +36,27 @@ public class UserController extends BaseExceptionHandleAction implements Constan
     }
 
 
+    @ResponseBody
     @RequestMapping("/register_action")
-    private String register_action(Model model,
-                         @RequestParam(value = "userName") String userName,
-                         @RequestParam(value = "userPassword") String userPassword,
-                         @RequestParam(value = "userNick") String userNick,
-                         HttpSession session) throws Exception{
-        System.out.println(userNick);
+    private String register_action(@RequestBody String requestJson, HttpServletRequest request) throws Exception{
+        System.out.println("!!!");
+        System.out.println(requestJson);
         User user = new User();
+        ObjectMapper mapper = new ObjectMapper();
+        Map map = mapper.readValue(requestJson, Map.class);
+        String userName = (String) map.get("userName");
+        String userPassword = (String) map.get("userPassword");
+        String userNick  = (String) map.get("userNick");
+        if (userDAO.query(userName) != null) {
+            throw new BusinessException(ALERT_USER_NAME_ALREADY_EXIST);
+        }
         user.setUserName(userName);
         user.setUserPassword(userPassword);
         user.setUserNick(userNick);
         user.setUserState(STATE_AVAILABLE);
         user.setUserType(USER_TYPE_STUDENT);
         userDAO.add(user);
-        return "/login";
+        return Tools.creteJasonString(Constants.CODE_SUCCESS);
     }
 
     @RequestMapping("/register")

@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class ComputerPK implements Serializable {
     private int computerId;
@@ -27,14 +26,19 @@ public class ComputerPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         ComputerPK that = (ComputerPK) o;
-        return computerId == that.computerId &&
-                labId == that.labId;
+
+        if (computerId != that.computerId) return false;
+        if (labId != that.labId) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(computerId, labId);
+        int result = computerId;
+        result = 31 * result + labId;
+        return result;
     }
 }

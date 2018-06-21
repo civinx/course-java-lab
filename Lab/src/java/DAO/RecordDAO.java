@@ -1,7 +1,6 @@
 package DAO;
 
 import IDAO.IRecordDAO;
-import model.Lab;
 import model.Record;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,7 +55,15 @@ public class RecordDAO implements IRecordDAO {
 
     @Override
     public List queryListByLabId(int labId) {
-        return null;
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        String hql = "from Record where labId = :labId";
+        Query query = session.createQuery(hql);
+        query.setParameter("labId", labId);
+        List<Record> result = query.list();
+        session.getTransaction().commit();
+        session.close();
+        return result;
     }
 
     @Override

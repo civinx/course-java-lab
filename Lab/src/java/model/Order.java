@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 public class Order {
     private int orderId;
@@ -72,19 +71,30 @@ public class Order {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Order order = (Order) o;
-        return orderId == order.orderId &&
-                userId == order.userId &&
-                labId == order.labId &&
-                computerId == order.computerId &&
-                Objects.equals(orderStartTime, order.orderStartTime) &&
-                Objects.equals(orderEndTime, order.orderEndTime) &&
-                Objects.equals(orderState, order.orderState);
+
+        if (orderId != order.orderId) return false;
+        if (userId != order.userId) return false;
+        if (labId != order.labId) return false;
+        if (computerId != order.computerId) return false;
+        if (orderStartTime != null ? !orderStartTime.equals(order.orderStartTime) : order.orderStartTime != null)
+            return false;
+        if (orderEndTime != null ? !orderEndTime.equals(order.orderEndTime) : order.orderEndTime != null) return false;
+        if (orderState != null ? !orderState.equals(order.orderState) : order.orderState != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(orderId, userId, labId, computerId, orderStartTime, orderEndTime, orderState);
+        int result = orderId;
+        result = 31 * result + userId;
+        result = 31 * result + labId;
+        result = 31 * result + computerId;
+        result = 31 * result + (orderStartTime != null ? orderStartTime.hashCode() : 0);
+        result = 31 * result + (orderEndTime != null ? orderEndTime.hashCode() : 0);
+        result = 31 * result + (orderState != null ? orderState.hashCode() : 0);
+        return result;
     }
 }

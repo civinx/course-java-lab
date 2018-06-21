@@ -37,7 +37,7 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
+                        <h3 class="panel-title">登录</h3>
                     </div>
                     <div class="panel-body">
                         <%--<form >--%>
@@ -75,13 +75,14 @@
         $(window).ready(function () {
             $("#login-btn").click(function() {
                 login();
-            })
+            });
             function login() {
                 $.ajax({
                         type: "POST",
                         url: "login_action",
                         data: $('#login-form').serialize(),
                         dataType: "json",
+                        // contentType : "application/json;charset=utf-8",
                         success: function (result) {
                             if (result.success !== true) {
                                 alert(result.msg);

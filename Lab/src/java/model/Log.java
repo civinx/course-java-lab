@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 public class Log {
     private int logId;
@@ -54,17 +53,25 @@ public class Log {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Log log = (Log) o;
-        return logId == log.logId &&
-                userId == log.userId &&
-                Objects.equals(logAction, log.logAction) &&
-                Objects.equals(logTime, log.logTime) &&
-                Objects.equals(logType, log.logType);
+
+        if (logId != log.logId) return false;
+        if (userId != log.userId) return false;
+        if (logAction != null ? !logAction.equals(log.logAction) : log.logAction != null) return false;
+        if (logTime != null ? !logTime.equals(log.logTime) : log.logTime != null) return false;
+        if (logType != null ? !logType.equals(log.logType) : log.logType != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(logId, userId, logAction, logTime, logType);
+        int result = logId;
+        result = 31 * result + userId;
+        result = 31 * result + (logAction != null ? logAction.hashCode() : 0);
+        result = 31 * result + (logTime != null ? logTime.hashCode() : 0);
+        result = 31 * result + (logType != null ? logType.hashCode() : 0);
+        return result;
     }
 }

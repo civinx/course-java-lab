@@ -1,22 +1,20 @@
 package controller;
 
-import DAO.LabDAO;
 import IDAO.IComputerDAO;
 import IDAO.ILabDAO;
 import exception.BaseExceptionHandleAction;
 import exception.BusinessException;
 import model.Computer;
+import model.Lab;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import utility.Constants;
 import utility.Tools;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Controller
 public class ComputerController extends BaseExceptionHandleAction implements Constants {

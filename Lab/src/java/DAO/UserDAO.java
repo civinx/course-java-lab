@@ -1,6 +1,7 @@
 package DAO;
 
 import IDAO.IUserDAO;
+import model.Record;
 import model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -88,6 +89,19 @@ public class UserDAO implements IUserDAO, Constants {
         }
         List<User> result = query.list();
         session.getTransaction().commit();
+        session.close();
+        return result;
+    }
+
+    @Override
+    public List queryListInRecord(int labId) throws Exception {
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+//        String hql = "select User from User left join Record where Record.labId = :labId";
+        String hql = "select user from Record record right join record.userByUserId user where record.labId = :labId";
+        Query query = session.createQuery(hql);
+        query.setParameter("labId", labId);
+        List<User> result = query.list();
         session.close();
         return result;
     }

@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Objects;
-
 public class LabUser {
     private int labUserId;
     private int userId;
@@ -35,15 +33,21 @@ public class LabUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         LabUser labUser = (LabUser) o;
-        return labUserId == labUser.labUserId &&
-                userId == labUser.userId &&
-                labId == labUser.labId;
+
+        if (labUserId != labUser.labUserId) return false;
+        if (userId != labUser.userId) return false;
+        if (labId != labUser.labId) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(labUserId, userId, labId);
+        int result = labUserId;
+        result = 31 * result + userId;
+        result = 31 * result + labId;
+        return result;
     }
 }

@@ -1,13 +1,16 @@
 package controller;
 
 import IDAO.ILabDAO;
+import IDAO.IRecordDAO;
 import IDAO.IUserDAO;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import exception.BaseExceptionHandleAction;
 import exception.BusinessException;
 import model.Lab;
+import model.Record;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,7 +18,9 @@ import utility.Constants;
 import utility.Tools;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class LabController extends BaseExceptionHandleAction implements Constants {
@@ -25,6 +30,9 @@ public class LabController extends BaseExceptionHandleAction implements Constant
 
     @Resource (name = "userDAO")
     private IUserDAO userDAO;
+
+    @Resource (name = "recordDAO")
+    private IRecordDAO recordDAO;
 
     @ResponseBody
     @RequestMapping("/home/lab/add_action")
@@ -127,6 +135,29 @@ public class LabController extends BaseExceptionHandleAction implements Constant
             return result;
         } catch (Exception e) {
             model.addAttribute(SESSION_ERROR, e.getMessage());
+            return "/error.jsp";
+        }
+    }
+
+    @RequestMapping("/home/lab/record_action")
+    @ResponseBody
+    private String studetn_end(@RequestBody String requestJson, HttpServletRequest request) throws Exception {
+        System.out.println(requestJson);
+        ObjectMapper mapper = new ObjectMapper();
+        Map map = mapper.readValue(requestJson, Map.class);
+        int labId = Integer.valueOf((String) map.get("labId"));
+        List<Record> recordList = recordDAO.queryListByLabId(labId);
+        request.getSession().setAttribute(ATTRIBUTE_RECORD_LIST, recordList);
+        request.getSession().setAttribute(ATTRIBUTE_USER_LIST, userDAO.queryListInRecord(labId));
+        request.getSession().setAttribute(ATTRIBUTE_LAB, labDAO.query(labId));
+        return Tools.creteJasonString(CODE_SUCCESS);
+    }
+
+    @RequestMapping("/home/lab/record")
+    private String lab_record(Model model) throws Exception {
+        try {
+            return "/lab_record.jsp";
+        } catch (Exception ex) {
             return "/error.jsp";
         }
     }

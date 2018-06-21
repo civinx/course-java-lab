@@ -100,64 +100,63 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">实验室</h1>
+                <h1 class="page-header">实验室上机记录</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
         <%
-            Lab lab = (Lab) request.getAttribute(Constants.ATTRIBUTE_LAB);
+            Lab lab = (Lab) request.getSession().getAttribute(Constants.ATTRIBUTE_LAB);
+            List<User> userList = (List) request.getSession().getAttribute(Constants.ATTRIBUTE_USER_LIST);
+            List<Record> recordList = (List) request.getSession().getAttribute(Constants.ATTRIBUTE_RECORD_LIST);
         %>
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <%=lab.getLabName()%>
+                        <%=lab.getLabName()%>>
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
-                                <th>序号</th>
-                                <th>电脑编号</th>
-                                <th>电脑IP</th>
-                                <th>电脑位置</th>
-                                <th>电脑状态</th>
-                                <th>开始上机</th>
+                                <th>记录编号</th>
+                                <th>用户名称</th>
+                                <th>电脑ID</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
                             </tr>
                             </thead>
                             <tbody>
                             <%
-                                List<Computer> computerList = (List) request.getAttribute(Constants.ATTRIBUTE_COMPUTER_LIST);
-                                User user = (User) request.getSession().getAttribute(Constants.SESSION_USER);
-                                if (computerList == null) return;;
-                                for (int i = 0; i < computerList.size(); i ++) {
-                                    Computer computer = (Computer) computerList.get(i);
+                                if (recordList == null) return;;
+                                if (userList == null) return;
+                                for (int i = 0; i < recordList.size(); i ++) {
+                                    Record record = recordList.get(i);
+                                    User user = userList.get(i);
                             %>
                             <tr class="odd gradeX">
-                                <td><%=i+1%></td>
-                                <td><%=computer.getLabId()+"-"+computer.getComputerId()%></td>
-                                <td><%=computer.getComputerIp()%></td>
-                                <td><%=computer.getComputerLoc()%></td>
-                                <td><%=Constants.MAP_STATE[computer.getComputerState()]%></td>
-
-                                <% if (computer.getComputerState() == Constants.STATE_USED && computer.getUserId() != user.getUserId()) {%>
-                                <td><button type="button" class="btn btn-danger disabled"> 已被使用 </button></td>
-                                <%} else if (computer.getComputerState() == Constants.STATE_USED && computer.getUserId() == user.getUserId()) {%>
-                                <td><button id="<%="end-btn" + (i+1)%>" value="<%=computer.getComputerIp()%>" type="button" class="btn btn-warning"> 下机 </button></td>
-                                <%} else { %>
-                                <td><button id="<%="start-btn" + (i+1)%>" value="<%=computer.getComputerIp()%>" type="button" class="btn btn-primary"> 开始上机 </button></td>
+                                <td><%=record.getRecordId()%></td>
+                                <td><%=user.getUserNick()%></td>
+                                <td><%=record.getComputerId()%></td>
+                                <td><%=record.getRecordStartTime()%></td>
+                                <% if (record.getRecordEndTime() == null) {%>
+                                <td>还未下机</td>
+                                <% } else { %>
+                                <td><%=record.getRecordEndTime()%></td>
                                 <%}%>
-
                             </tr>
                             <%}%>
-
 
                             </tbody>
                         </table>
                         <!-- /.table-responsive -->
-
+                        <div class="well">
+                            <%--<h4>DataTables Usage Information</h4>--%>
+                            <%--<p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>--%>
+                            <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>
+                        </div>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -189,66 +188,6 @@
 <!-- Custom Theme JavaScript -->
 <script src="/dist/js/sb-admin-2.js"></script>
 
-<script>
-    $(window).ready(function () {
-        for (var i = 0; i < <%=computerList.size()%>; i ++) {
-            $("#start-btn"+(i+1)).click(function() {
-                start($(this).attr("value"));
-            });
-            $("#end-btn"+(i+1)).click(function() {
-                end($(this).attr("value"));
-            });
-        }
-
-        function start(computerIp) {
-            var data = {"computerIp": computerIp};
-            $.ajax({
-                    type: "POST",
-                    url: "/home/student/computer/start",
-                    contentType: "application/json",
-                    data: JSON.stringify(data),
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.success !== true) {
-                            alert(result.msg);
-                            return;
-                        }
-                        $(location).attr('href', "/home/student/computer?labId=" + <%=lab.getLabId()%>);
-
-                    },
-                    error:
-                        function (result, status) {
-                            console.log(result);
-                        }
-                }
-            )
-        }
-
-        function end(computerIp) {
-            var data = {"computerIp": computerIp};
-            $.ajax({
-                    type: "POST",
-                    url: "/home/student/computer/end",
-                    contentType: "application/json",
-                    data: JSON.stringify(data),
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.success !== true) {
-                            alert(result.msg);
-                            return;
-                        }
-                        $(location).attr('href', "/home/student/computer?labId=" + <%=lab.getLabId()%>);
-                    },
-                    error:
-                        function (result, status) {
-                            console.log(result);
-                        }
-                }
-            )
-        }
-    })
-
-</script>
 </body>
 
 </html>

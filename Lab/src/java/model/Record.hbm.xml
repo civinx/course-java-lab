@@ -23,5 +23,12 @@
     <property name="recordEndTime">
       <column name="record_end_time" sql-type="datetime" />
     </property>
+    <many-to-one name="userByUserId" class="model.User" insert="false" update="false">
+      <column name="user_id" />
+    </many-to-one>
+    <many-to-one name="computer" class="model.Computer" insert="false" update="false">
+      <column name="computer_id" />
+      <column name="lab_id" />
+    </many-to-one>
   </class>
 </hibernate-mapping>

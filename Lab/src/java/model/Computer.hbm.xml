@@ -5,7 +5,6 @@
 <hibernate-mapping>
 
   <class name="model.Computer" table="Computer" schema="lab" >
-    <!--mapped="true" class="model.ComputerPK"-->
     <composite-id>
       <key-property name="computerId">
         <column name="computer_id" sql-type="int(11)" />
@@ -24,7 +23,17 @@
       <column name="computer_state" sql-type="int(11)" />
     </property>
     <property name="userId">
-      <column name="user_id" sql-type="int(11)" />
+      <column name="user_id" sql-type="int(11)" not-null="true" />
     </property>
+    <many-to-one name="userByUserId" class="model.User" insert="false" update="false">
+      <column name="user_id" not-null="true" />
+    </many-to-one>
+    <set name="records" inverse="true">
+      <key>
+        <column name="computer_id" />
+        <column name="lab_id" />
+      </key>
+      <one-to-many not-found="ignore" class="model.Record" />
+    </set>
   </class>
 </hibernate-mapping>

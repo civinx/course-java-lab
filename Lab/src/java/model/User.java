@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Objects;
+import java.util.Collection;
 
 public class User {
     private int userId;
@@ -9,6 +9,8 @@ public class User {
     private String userNick;
     private int userType;
     private int userState;
+    private Collection<Computer> computersByUserId;
+    private Collection<Record> recordsByUserId;
 
     public int getUserId() {
         return userId;
@@ -62,18 +64,43 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         User user = (User) o;
-        return userId == user.userId &&
-                userType == user.userType &&
-                userState == user.userState &&
-                Objects.equals(userName, user.userName) &&
-                Objects.equals(userPassword, user.userPassword) &&
-                Objects.equals(userNick, user.userNick);
+
+        if (userId != user.userId) return false;
+        if (userType != user.userType) return false;
+        if (userState != user.userState) return false;
+        if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
+        if (userPassword != null ? !userPassword.equals(user.userPassword) : user.userPassword != null) return false;
+        if (userNick != null ? !userNick.equals(user.userNick) : user.userNick != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
+        int result = userId;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
+        result = 31 * result + (userNick != null ? userNick.hashCode() : 0);
+        result = 31 * result + userType;
+        result = 31 * result + userState;
+        return result;
+    }
 
-        return Objects.hash(userId, userName, userPassword, userNick, userType, userState);
+    public Collection<Computer> getComputersByUserId() {
+        return computersByUserId;
+    }
+
+    public void setComputersByUserId(Collection<Computer> computersByUserId) {
+        this.computersByUserId = computersByUserId;
+    }
+
+    public Collection<Record> getRecordsByUserId() {
+        return recordsByUserId;
+    }
+
+    public void setRecordsByUserId(Collection<Record> recordsByUserId) {
+        this.recordsByUserId = recordsByUserId;
     }
 }

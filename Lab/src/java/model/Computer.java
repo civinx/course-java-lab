@@ -1,7 +1,7 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.Collection;
 
 public class Computer implements Serializable {
     private int computerId;
@@ -9,7 +9,9 @@ public class Computer implements Serializable {
     private String computerIp;
     private String computerLoc;
     private int computerState;
-    private int userId;
+    private Integer userId;
+    private User userByUserId;
+    private Collection<Record> records;
 
     public int getComputerId() {
         return computerId;
@@ -51,11 +53,11 @@ public class Computer implements Serializable {
         this.computerState = computerState;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -63,17 +65,44 @@ public class Computer implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Computer computer = (Computer) o;
-        return computerId == computer.computerId &&
-                labId == computer.labId &&
-                computerState == computer.computerState &&
-                Objects.equals(computerIp, computer.computerIp) &&
-                Objects.equals(computerLoc, computer.computerLoc);
+
+        if (computerId != computer.computerId) return false;
+        if (labId != computer.labId) return false;
+        if (computerState != computer.computerState) return false;
+        if (computerIp != null ? !computerIp.equals(computer.computerIp) : computer.computerIp != null) return false;
+        if (computerLoc != null ? !computerLoc.equals(computer.computerLoc) : computer.computerLoc != null)
+            return false;
+        if (userId != null ? !userId.equals(computer.userId) : computer.userId != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
+        int result = computerId;
+        result = 31 * result + labId;
+        result = 31 * result + (computerIp != null ? computerIp.hashCode() : 0);
+        result = 31 * result + (computerLoc != null ? computerLoc.hashCode() : 0);
+        result = 31 * result + computerState;
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        return result;
+    }
 
-        return Objects.hash(computerId, labId, computerIp, computerLoc, computerState);
+    public User getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
+    }
+
+    public Collection<Record> getRecords() {
+        return records;
+    }
+
+    public void setRecords(Collection<Record> records) {
+        this.records = records;
     }
 }

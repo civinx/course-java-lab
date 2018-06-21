@@ -1,12 +1,10 @@
 package model;
 
-import java.util.Objects;
-
 public class Lab {
     private int labId;
     private String labName;
-    private int labState;
-    private int labGate;
+    private Integer labState;
+    private Integer labGate;
 
     public int getLabId() {
         return labId;
@@ -24,19 +22,19 @@ public class Lab {
         this.labName = labName;
     }
 
-    public int getLabState() {
+    public Integer getLabState() {
         return labState;
     }
 
-    public void setLabState(int labState) {
+    public void setLabState(Integer labState) {
         this.labState = labState;
     }
 
-    public int getLabGate() {
+    public Integer getLabGate() {
         return labGate;
     }
 
-    public void setLabGate(int labGate) {
+    public void setLabGate(Integer labGate) {
         this.labGate = labGate;
     }
 
@@ -44,16 +42,23 @@ public class Lab {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Lab lab = (Lab) o;
-        return labId == lab.labId &&
-                labState == lab.labState &&
-                labGate == lab.labGate &&
-                Objects.equals(labName, lab.labName);
+
+        if (labId != lab.labId) return false;
+        if (labName != null ? !labName.equals(lab.labName) : lab.labName != null) return false;
+        if (labState != null ? !labState.equals(lab.labState) : lab.labState != null) return false;
+        if (labGate != null ? !labGate.equals(lab.labGate) : lab.labGate != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(labId, labName, labState, labGate);
+        int result = labId;
+        result = 31 * result + (labName != null ? labName.hashCode() : 0);
+        result = 31 * result + (labState != null ? labState.hashCode() : 0);
+        result = 31 * result + (labGate != null ? labGate.hashCode() : 0);
+        return result;
     }
 }

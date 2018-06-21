@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 public class Record {
     private int recordId;
@@ -10,6 +9,8 @@ public class Record {
     private int labId;
     private Timestamp recordStartTime;
     private Timestamp recordEndTime;
+    private User userByUserId;
+    private Computer computer;
 
     public int getRecordId() {
         return recordId;
@@ -63,18 +64,45 @@ public class Record {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Record record = (Record) o;
-        return recordId == record.recordId &&
-                userId == record.userId &&
-                computerId == record.computerId &&
-                labId == record.labId &&
-                Objects.equals(recordStartTime, record.recordStartTime) &&
-                Objects.equals(recordEndTime, record.recordEndTime);
+
+        if (recordId != record.recordId) return false;
+        if (userId != record.userId) return false;
+        if (computerId != record.computerId) return false;
+        if (labId != record.labId) return false;
+        if (recordStartTime != null ? !recordStartTime.equals(record.recordStartTime) : record.recordStartTime != null)
+            return false;
+        if (recordEndTime != null ? !recordEndTime.equals(record.recordEndTime) : record.recordEndTime != null)
+            return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
+        int result = recordId;
+        result = 31 * result + userId;
+        result = 31 * result + computerId;
+        result = 31 * result + labId;
+        result = 31 * result + (recordStartTime != null ? recordStartTime.hashCode() : 0);
+        result = 31 * result + (recordEndTime != null ? recordEndTime.hashCode() : 0);
+        return result;
+    }
 
-        return Objects.hash(recordId, userId, computerId, labId, recordStartTime, recordEndTime);
+    public User getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
+    }
+
+    public Computer getComputer() {
+        return computer;
+    }
+
+    public void setComputer(Computer computer) {
+        this.computer = computer;
     }
 }

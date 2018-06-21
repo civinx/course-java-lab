@@ -5,7 +5,6 @@ import model.Computer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.hibernate.sql.Update;
 import utility.Constants;
 
 import javax.annotation.Resource;

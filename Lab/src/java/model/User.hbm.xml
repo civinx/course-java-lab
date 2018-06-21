@@ -23,5 +23,17 @@
     <property name="userState">
       <column name="user_state" sql-type="int(11)" />
     </property>
+    <set name="computersByUserId" inverse="true">
+      <key>
+        <column name="user_id" not-null="true" />
+      </key>
+      <one-to-many not-found="ignore" class="model.Computer" />
+    </set>
+    <set name="recordsByUserId" inverse="true">
+      <key>
+        <column name="user_id" />
+      </key>
+      <one-to-many not-found="ignore" class="model.Record" />
+    </set>
   </class>
 </hibernate-mapping>

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BaseExceptionHandleAction {
+
     @ExceptionHandler
     @ResponseBody
     public String handleAndReturnData(HttpServletRequest request, HttpServletResponse response, Exception ex) {
