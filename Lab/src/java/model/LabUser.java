@@ -4,6 +4,24 @@ public class LabUser {
     private int labUserId;
     private int userId;
     private int labId;
+    private User userByUserId;
+    private Lab userByLabId;
+
+    public Lab getUserByLabId() {
+        return userByLabId;
+    }
+
+    public void setUserByLabId(Lab userByLabId) {
+        this.userByLabId = userByLabId;
+    }
+
+    public User getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
+    }
 
     public int getLabUserId() {
         return labUserId;

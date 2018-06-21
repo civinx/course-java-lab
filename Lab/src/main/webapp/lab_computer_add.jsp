@@ -2,6 +2,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.User" %>
 <%@ page import="model.Lab" %>
+<%@ page import="static utility.Constants.ATTRIBUTE_LAB" %>
+<%@ page import="static utility.Constants.ALERT_COMPUTER_IP_OUT_OF_RANGE" %>
+<%@ page import="static utility.Constants.ALERT_COMPUTER_ID_SHOULD_BE_NUMBER" %>
+<%@ page import="static utility.Constants.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <head>
 
@@ -44,18 +48,23 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">添加电脑</h3>
                 </div>
+
+                <%
+                    Lab lab = (Lab) request.getAttribute(ATTRIBUTE_LAB);
+
+                %>
                 <div class="panel-body">
                     <form method="get" action="/home/lab/member/add_action">
                         <fieldset id="add-form">
                             <%--style="display: none"--%>
                             <div class="form-group">
-                                <input class="form-control" style="display: none" id="labId" name="labId" type="text" value="<%=request.getParameter("labId")%>">
+                                <input class="form-control" style="display: none" id="labId" name="labId" type="text" value="<%=lab.getLabId()%>">
                             </div>
+                            <%--<div class="form-group">--%>
+                                <%--<input class="form-control" placeholder="电脑ID" id="computerId" name="computerId" type="text" autofocus>--%>
+                            <%--</div>--%>
                             <div class="form-group">
-                                <input class="form-control" placeholder="电脑ID" id="computerId" name="computerId" type="text" autofocus>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" placeholder="电脑IP" id="computerIpLast" name="computerIpLast" type="text" autofocus>
+                                <input class="form-control" placeholder="电脑IP末尾" id="computerIpLast" name="computerIpLast" type="text" autofocus>
                             </div>
                             <div class="form-group">
                                 <input class="form-control" placeholder="电脑位置" id="computerLoc" name="computerLoc" type="text" autofocus>
@@ -69,10 +78,6 @@
         </div>
     </div>
 </div>
-
-<%
-    Lab lab = (Lab) request.getAttribute(Constants.ATTRIBUTE_LAB);
-%>
 
 
 <!-- jQuery -->
@@ -90,8 +95,25 @@
 <script>
     $(window).ready(function () {
         $("#add-btn").click(function() {
-            add();
+            if (check()) {
+                add();
+            }
         });
+        
+        function check() {
+            // var computerId = document.getElementById("computerId").value;
+            var computerIpLast = document.getElementById("computerIpLast").value;
+            <%--if (isNaN(computerId)) {--%>
+                <%--alert("<%=Constants.ALERT_COMPUTER_ID_SHOULD_BE_NUMBER%>");--%>
+                <%--return false;--%>
+            <%--}--%>
+            if (isNaN(computerIpLast)) {
+                alert("<%=Constants.ALERT_COMPUTER_LAST_IP_SHOULD_BE_NUMBER%>");
+                return false;
+            }
+            return true;
+        }
+
         function add() {
             $.ajax({
                     type: "POST",

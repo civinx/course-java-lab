@@ -1,4 +1,5 @@
 <%@ page import="utility.Constants" %>
+<%@ page import="static utility.Constants.ALERT_LAB_GATE_SHOULD_BE_NUMBER" %>
 <%@ page language="java" pageEncoding="UTF-8" %>
 <head>
 
@@ -73,8 +74,20 @@
 <script>
     $(window).ready(function () {
         $("#add-btn").click(function() {
-            add();
+            if (check()) {
+                add();
+            }
         });
+
+        function check() {
+            var labGate = document.getElementById("labGate").value;
+            if (isNaN(labGate)) {
+                alert("<%=ALERT_LAB_GATE_SHOULD_BE_NUMBER%>");
+                return false;
+            }
+            return true;
+        }
+
         function add() {
             $.ajax({
                     type: "POST",

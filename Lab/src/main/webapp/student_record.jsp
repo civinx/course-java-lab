@@ -8,6 +8,8 @@
 <%@ page import="model.ComputerPK" %>
 <%@ page import="java.util.List" %>
 <%@ page import="utility.Constants" %>
+<%@ page import="static utility.Constants.SESSION_USER" %>
+<%@ page import="static utility.Constants.ATTRIBUTE_COMPUTER_LIST" %>
 <head>
 
     <meta charset="utf-8">
@@ -100,55 +102,73 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">我的实验室</h1>
+                <h1 class="page-header">我的上机记录</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
+        <%
+            User user = (User) request.getSession().getAttribute(SESSION_USER);
+        %>
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        实验室列表
+                        <%=user.getUserNick()%>
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
-                                <th>实验室ID</th>
+                                <th>记录编号</th>
                                 <th>实验室名称</th>
-                                <th>实验室网段</th>
-                                <th>选择电脑上机</th>
+                                <th>电脑编号</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
                             </tr>
                             </thead>
                             <tbody>
                             <%
-                                User user = (User)(request.getSession().getAttribute(Constants.SESSION_USER));
+//                                int test = (Integer) request.getAttribute("test");
+//                                System.out.println(test);
+                                List<Record> recordList = (List) request.getAttribute(Constants.ATTRIBUTE_RECORD_LIST);
                                 List<Lab> labList = (List) request.getAttribute(Constants.ATTRIBUTE_LAB_LIST);
-                                if (labList == null) return;
-                                for (Lab lab : labList) {
-                                    if (lab.getLabGate() == Constants.STATE_DELETE) continue;
+                                List<Computer> computerList = (List) request.getAttribute(Constants.ATTRIBUTE_COMPUTER_LIST);
+                                if (labList == null) {
+                                    System.out.println(222);
+                                    return;
+                                }
+                                if (recordList == null) {
+                                    System.out.println(111);
+                                    return;
+                                }
+
+                                for (int i = 0; i < recordList.size(); i ++) {
+                                    Record record = recordList.get(i);
+                                    Lab lab = labList.get(i);
+                                    Computer computer = computerList.get(i);
                             %>
                             <tr class="odd gradeX">
-                                <td><%=lab.getLabId()%></td>
+                                <td><%=record.getRecordId()%></td>
                                 <td><%=lab.getLabName()%></td>
-                                <%--<td><%=Constants.MAP_STATE[lab.getLabState()]%></td>--%>
-                                <td><%=Constants.IP_GATE + lab.getLabGate() + ".0~255"%></td>
-                                <td><button type="button" class="btn btn-primary"
-                                            onclick="window.location.href='/home/student/computer?labId=<%=lab.getLabId()%>'"> 选择电脑上机  </button></td>
+                                <td><%=record.getComputer().getLabId() + "-" + record.getComputerId()%></td>
+                                <td><%=record.getRecordStartTime()%></td>
+                                <% if (record.getRecordEndTime() == null) {%>
+                                <td><button id="<%="end-btn" + (i+1)%>" value="<%=computer.getComputerIp()%>" type="button" class="btn btn-warning"> 下机 </button></td>
+                                <% } else { %>
+                                <td><%=record.getRecordEndTime()%></td>
+                                <%}%>
                             </tr>
                             <%}%>
-                            </tbody>
 
+                            </tbody>
                         </table>
+                        <!-- /.table-responsive -->
                         <div class="well">
                             <%--<h4>DataTables Usage Information</h4>--%>
                             <%--<p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>--%>
-                            <a class="btn btn-default btn-lg btn-block" target="_blank" href="/home/student/record?userId=<%=user.getUserId()%>">我的上机记录</a>
-
                         </div>
-
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -180,6 +200,40 @@
 <!-- Custom Theme JavaScript -->
 <script src="/dist/js/sb-admin-2.js"></script>
 
+<script>
+    $(window).ready(function () {
+        for (var i = 0; i < <%=computerList.size()%>; i ++) {
+
+            $("#end-btn"+(i+1)).click(function() {
+                end($(this).attr("value"));
+            });
+        }
+
+        function end(computerIp) {
+            var data = {"computerIp": computerIp};
+            $.ajax({
+                    type: "POST",
+                    url: "/home/student/computer/end",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.success !== true) {
+                            alert(result.msg);
+                            return;
+                        }
+                        $(location).attr('href', "/home/student/record");
+                    },
+                    error:
+                        function (result, status) {
+                            console.log(result);
+                        }
+                }
+            )
+        }
+    })
+
+</script>
 </body>
 
 </html>

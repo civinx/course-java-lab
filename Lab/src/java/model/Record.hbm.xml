@@ -26,6 +26,9 @@
     <many-to-one name="userByUserId" class="model.User" insert="false" update="false">
       <column name="user_id" />
     </many-to-one>
+    <many-to-one name="labByLabId" class="model.Lab" insert="false" update="false">
+      <column name="lab_id" />
+    </many-to-one>
     <many-to-one name="computer" class="model.Computer" insert="false" update="false">
       <column name="computer_id" />
       <column name="lab_id" />

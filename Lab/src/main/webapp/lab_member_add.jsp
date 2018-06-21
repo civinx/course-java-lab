@@ -57,7 +57,7 @@
                                 if (userList != null)
                                     for (User user : userList) {
                                 %>
-                                    <option value="<%=user.getUserId()%>"><%=user.getUserName()%></option>
+                                    <option value="<%=user.getUserId()%>"><%=user.getUserNick()%></option>
                                 <%
                                 }
                                 %>

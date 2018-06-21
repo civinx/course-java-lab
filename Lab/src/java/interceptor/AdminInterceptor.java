@@ -1,6 +1,6 @@
 package interceptor;
 
-import jdk.nashorn.internal.objects.Global;
+import model.User;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import utility.Constants;
@@ -8,13 +8,13 @@ import utility.Constants;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class LoginInterceptor implements HandlerInterceptor, Constants {
+public class AdminInterceptor implements HandlerInterceptor, Constants {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        Object user = httpServletRequest.getSession().getAttribute(SESSION_USER);
-        if (user == null) {
-            System.out.println("未登录转跳");
-            httpServletResponse.sendRedirect("/login");
+        User user = (User) httpServletRequest.getSession().getAttribute(SESSION_USER);
+        if (user.getUserType() != USER_STATE_ADMIN) {
+            System.out.println("非管理员转跳");
+            httpServletResponse.sendRedirect("/home");
             return false;
         }
         return true;

@@ -35,5 +35,15 @@
       </key>
       <one-to-many not-found="ignore" class="model.Record" />
     </set>
+
+    <set name="LabUserByUserId" inverse="true">
+      <key>
+        <column name="user_id" />
+      </key>
+      <one-to-many not-found="ignore" class="model.LabUser" />
+    </set>
+
+
+
   </class>
 </hibernate-mapping>

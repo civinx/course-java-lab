@@ -1,3 +1,5 @@
+<%@ page import="static utility.Constants.SESSION_USER" %>
+<%@ page import="model.User" %>
 <%@ page language="java" pageEncoding="UTF-8" %>
 <head>
 
@@ -35,6 +37,7 @@
 
 <body>
 
+    <% User curUser = (User) request.getSession().getAttribute(SESSION_USER);%>
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -45,12 +48,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/home">实验室管理系统</a>
+                <a class="navbar-brand" href="/home">实验室管理系统 </a>
             </div>
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
                 <!-- /.dropdown -->
+                <div style="margin-right: 50px">你好！<%=curUser.getUserNick()%></div>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>

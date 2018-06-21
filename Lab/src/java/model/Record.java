@@ -11,6 +11,15 @@ public class Record {
     private Timestamp recordEndTime;
     private User userByUserId;
     private Computer computer;
+    private Lab labByLabId;
+
+    public Lab getLabByLabId() {
+        return labByLabId;
+    }
+
+    public void setLabByLabId(Lab labByLabId) {
+        this.labByLabId = labByLabId;
+    }
 
     public int getRecordId() {
         return recordId;

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class User {
     private int userId;
@@ -11,6 +12,15 @@ public class User {
     private int userState;
     private Collection<Computer> computersByUserId;
     private Collection<Record> recordsByUserId;
+    private Collection<LabUser> LabUserByUserId;
+
+    public Collection<LabUser> getLabUserByUserId() {
+        return LabUserByUserId;
+    }
+
+    public void setLabUserByUserId(Collection<LabUser> labUserByUserId) {
+        LabUserByUserId = labUserByUserId;
+    }
 
     public int getUserId() {
         return userId;

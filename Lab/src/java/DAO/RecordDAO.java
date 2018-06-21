@@ -37,15 +37,7 @@ public class RecordDAO implements IRecordDAO {
 
     @Override
     public List queryList(String computerIp) {
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        String hql = "select Record from Record join Computer where Computer.computerIp = :computerIp";
-        Query query = session.createQuery(hql);
-        query.setParameter("computerIp", computerIp);
-        List<Record> result = query.list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.LabDAO;
 import IDAO.IComputerDAO;
 import IDAO.ILabDAO;
 import exception.BaseExceptionHandleAction;
@@ -64,7 +65,7 @@ public class ComputerController extends BaseExceptionHandleAction implements Con
     @RequestMapping("/home/lab/computer/add_action")
     private String computer_add_action(
             @RequestParam(value = "labId") int labId,
-            @RequestParam(value = "computerId") int computerId,
+//            @RequestParam(value = "computerId") int computerId,
             @RequestParam(value = "computerIpLast") int computerIpLast,
             @RequestParam(value = "computerLoc") String computerLoc) throws Exception {
 
@@ -72,19 +73,21 @@ public class ComputerController extends BaseExceptionHandleAction implements Con
 //                return ALERT_COMPUTER_IP_OUT_OF_RANGE;
             throw new BusinessException(ALERT_COMPUTER_IP_OUT_OF_RANGE, CODE_ERROR);
         }
-        String computerIp = Tools.createIP(labId, computerIpLast);
+        Lab lab = labDAO.query(labId);
+        String computerIp = Tools.createIP(lab.getLabGate(), computerIpLast);
         if (computerDAO.query(computerIp) != null) {
             throw new BusinessException(ALERT_COMPUTER_IP_USED);
         }
-        if (computerDAO.query(labId, computerId) != null) {
-            throw new BusinessException(ALERT_COMPUTER_ID_USED);
-        }
+//        if (computerDAO.query(labId, computerId) != null) {
+//            throw new BusinessException(ALERT_COMPUTER_ID_USED);
+//        }
         Computer computer = new Computer();
         computer.setComputerIp(computerIp);
         computer.setComputerLoc(computerLoc);
         computer.setComputerState(STATE_AVAILABLE);
         computer.setLabId(labId);
-        computer.setComputerId(computerId);
+//        computer.setComputerId(computerId);
+        computer.setUserId(0);
         computerDAO.add(computer);
         return Tools.creteJasonString(CODE_SUCCESS);
     }

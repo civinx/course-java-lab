@@ -58,11 +58,23 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <!-- 拦截所有URL中包含/user/的请求 -->
+            <!-- 拦截所有URL中包含/home/的请求 -->
             <mvc:mapping path="/home/**"/>
-            <bean class="interceptor.LoginInterceptor"></bean>
+            <bean class="interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- 拦截所有URL中包含/home/user/的请求 -->
+            <mvc:mapping path="/home/user/**"/>
+            <bean class="interceptor.AdminInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- 拦截所有URL中包含/home/lab/的请求 -->
+            <mvc:mapping path="/home/lab/**"/>
+            <bean class="interceptor.AdminInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+
 
     <mvc:annotation-driven />
 

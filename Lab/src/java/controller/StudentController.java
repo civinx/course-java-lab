@@ -25,6 +25,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -56,6 +57,20 @@ public class StudentController extends BaseExceptionHandleAction implements Cons
         model.addAttribute(ATTRIBUTE_COMPUTER_LIST, computerDAO.queryList(labId));
         model.addAttribute(ATTRIBUTE_LAB, labDAO.query(labId));
         return "/student_computer.jsp";
+    }
+
+    @RequestMapping("/home/student/record")
+    private String student_my_record(Model model, HttpServletRequest request) throws Exception {
+        User user = (User) request.getSession().getAttribute(SESSION_USER);
+        int userId = user.getUserId();
+        List recordList = (List) recordDAO.queryList(userId);
+        List labList = (List) labDAO.queryListInRecord(userId);
+        List computerList = (List) computerDAO.queryListInRecord(userId);
+        model.addAttribute("test", 123);
+        model.addAttribute(ATTRIBUTE_RECORD_LIST, recordList);
+        model.addAttribute(ATTRIBUTE_LAB_LIST, labList);
+        model.addAttribute(ATTRIBUTE_COMPUTER_LIST, computerList);
+        return "/student_record.jsp";
     }
 
     @RequestMapping("/home/student/computer/start")

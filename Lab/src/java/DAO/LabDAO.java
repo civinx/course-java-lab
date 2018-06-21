@@ -53,9 +53,11 @@ public class LabDAO implements ILabDAO, Constants {
     public Lab query(int labId) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        String hql = "from Lab where labId = ?";
-        Lab lab = (Lab) session.createQuery(hql).setParameter(0, labId).uniqueResult();
-        System.out.println(lab);
+        String hql = "from Lab where labId = :labId and labState != :labState";
+        Query query = session.createQuery(hql);
+        query.setParameter("labId", labId);
+        query.setParameter("labState", STATE_DELETE);
+        Lab lab = (Lab) query.uniqueResult();
         session.close();
         return lab;
     }
@@ -64,9 +66,11 @@ public class LabDAO implements ILabDAO, Constants {
     public Lab query(String labName) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        String hql = "from Lab where labName = ?";
-        Lab lab = (Lab) session.createQuery(hql).setParameter(0, labName).uniqueResult();
-        System.out.println(lab);
+        String hql = "from Lab where labName = :labName and labState != :labState";
+        Query query = session.createQuery(hql);
+        query.setParameter("labName", labName);
+        query.setParameter("labState", STATE_DELETE);
+        Lab lab = (Lab) query.uniqueResult();
         session.close();
         return lab;
     }
@@ -108,8 +112,9 @@ public class LabDAO implements ILabDAO, Constants {
     public List queryList(int userId) throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String hql = "from Lab where labId in (select labId from LabUser where userId = :userId)";
+        String hql = "from Lab where labState != :labState and labId in (select labId from LabUser where userId = :userId)";
         Query query = session.createQuery(hql);
+        query.setParameter("labState", STATE_DELETE);
         query.setParameter("userId", userId);
         List<Lab> result = query.list();
         session.getTransaction().commit();
@@ -121,20 +126,22 @@ public class LabDAO implements ILabDAO, Constants {
     public List queryMembers(int labId) throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String hql = "from LabUser where labId = :labId";
+//        String hql = "from LabUser where labId = :labId";
+        String hql = "select user from LabUser labUser right join labUser.userByUserId user " +
+                     "where user.userState != :userState and labUser.labId = :labId";
         Query query = session.createQuery(hql);
+        query.setParameter("userState", STATE_DELETE);
         query.setParameter("labId", labId);
-        List<LabUser> labUserList = query.list();
-        if (labUserList == null) {
-            return null;
-        }
-        List userList = new ArrayList();
-        for (LabUser labUser: labUserList) {
-            User user = userDAO.query(labUser.getUserId());
-            if (user.getUserState() != STATE_DELETE) {
-                userList.add(user);
-            }
-        }
+        List userList = query.list();
+//        List<LabUser> labUserList = query.list();
+//        if (labUserList == null) {
+//            return null;
+//        }
+//        List<User> userList = new ArrayList<>();
+//        for (LabUser labUser: labUserList) {
+//            User user = userDAO.query(labUser.getUserId());
+//            userList.add(user);
+//        }
         session.getTransaction().commit();
         session.close();
         return userList;
@@ -144,9 +151,10 @@ public class LabDAO implements ILabDAO, Constants {
     public List queryMembersOption(int labId) throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String hql = "from User where userId not in(" +
+        String hql = "from User where userState != :userState and userId not in(" +
                     "select userId from LabUser where labId = :labId)";
         Query query = session.createQuery(hql);
+        query.setParameter("userState", STATE_DELETE);
         query.setParameter("labId", labId);
         List<User> result = query.list();
         session.getTransaction().commit();
@@ -179,9 +187,16 @@ public class LabDAO implements ILabDAO, Constants {
         session.close();
     }
 
-//    Session session = sessionFactory.getCurrentSession();
-//        session.beginTransaction();
-//
-//    Query query = session.createQuery(hql);
-//        session.getTransaction().commit();
+    @Override
+    public List queryListInRecord(int userId) throws Exception {
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        String hql = "select lab from Record record right join record.labByLabId lab " +
+                     "where record.userId = :userId";
+        Query query = session.createQuery(hql);
+        query.setParameter("userId", userId);
+        List<Lab> result = query.list();
+        session.close();
+        return result;
+    }
 }

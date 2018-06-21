@@ -14,6 +14,7 @@ public interface ILabDAO {
     List queryList(int userId) throws Exception;
     List queryMembers(int labId) throws Exception;
     List queryMembersOption(int labId) throws Exception;
+    List queryListInRecord(int userId) throws Exception;
     void addMember(int labId, int userId) throws Exception;
     void deleteMember(int labId, int userId) throws Exception;
 }

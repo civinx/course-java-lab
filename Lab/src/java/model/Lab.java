@@ -1,10 +1,22 @@
 package model;
 
+import java.util.Collection;
+import java.util.Set;
+
 public class Lab {
     private int labId;
     private String labName;
     private Integer labState;
     private Integer labGate;
+    private Collection<LabUser> LabUserByLabId;
+
+    public Collection<LabUser> getLabUserByLabId() {
+        return LabUserByLabId;
+    }
+
+    public void setLabUserByLabId(Collection<LabUser> labUserByLabId) {
+        LabUserByLabId = labUserByLabId;
+    }
 
     public int getLabId() {
         return labId;

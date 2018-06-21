@@ -50,43 +50,24 @@ public class UserDAO implements IUserDAO, Constants {
     public synchronized User query(String userName) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        String hql = "from User where userName = ?";
-        User user = (User) session.createQuery(hql).setParameter(0, userName).uniqueResult();
+        String hql = "from User where userName = :userName and userState != :userState";
+        Query query = session.createQuery(hql);
+        query.setParameter("userName", userName);
+        query.setParameter("userState", STATE_DELETE);
+        User user = (User) query.uniqueResult();
         System.out.println(user);
         session.close();
         return user;
     }
 
-    /*
-    userNick = ""
-    userType = -1
-    userState = -1
-    上述情况不查
-     */
+
     @Override
-    public List queryList(String userNick, int userType, int userState) throws Exception {
+    public List queryList() throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-        String hql = "from User where 1 = 1";
-        if (!userNick.equals("")) {
-            hql += " and userNick = :userNick";
-        }
-        if (userType != -1) {
-            hql += " and userType = :userType";
-        }
-        if (userState != -1) {
-            hql += " and userState = :userState";
-        }
+        String hql = "from User where userState != :userState";
         Query query = session.createQuery(hql);
-        if (!userNick.equals("")) {
-            query.setParameter("userNick", userNick);
-        }
-        if (userType != -1) {
-            query.setParameter("userType", userType);
-        }
-        if (userState != -1) {
-            query.setParameter("userState", userState);
-        }
+        query.setParameter("userState", STATE_DELETE);
         List<User> result = query.list();
         session.getTransaction().commit();
         session.close();
@@ -97,10 +78,11 @@ public class UserDAO implements IUserDAO, Constants {
     public List queryListInRecord(int labId) throws Exception {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
-//        String hql = "select User from User left join Record where Record.labId = :labId";
-        String hql = "select user from Record record right join record.userByUserId user where record.labId = :labId";
+        String hql = "select user from Record record right join record.userByUserId user " +
+                     "where record.labId = :labId and user.userState != :userState";
         Query query = session.createQuery(hql);
         query.setParameter("labId", labId);
+        query.setParameter("userState", STATE_DELETE);
         List<User> result = query.list();
         session.close();
         return result;
@@ -110,8 +92,11 @@ public class UserDAO implements IUserDAO, Constants {
     public User query(int userId) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        String hql = "from User where userId = ?";
-        User user = (User) session.createQuery(hql).setParameter(0, userId).uniqueResult();
+        String hql = "from User where userId = :userId and userState != :userState";
+        Query query = session.createQuery(hql);
+        query.setParameter("userId", userId);
+        query.setParameter("userState", STATE_DELETE);
+        User user = (User) query.uniqueResult();
         System.out.println(user);
         session.close();
         return user;

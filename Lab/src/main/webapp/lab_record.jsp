@@ -114,7 +114,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <%=lab.getLabName()%>>
+                        <%=lab.getLabName()%>
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -123,7 +123,7 @@
                             <tr>
                                 <th>记录编号</th>
                                 <th>用户名称</th>
-                                <th>电脑ID</th>
+                                <th>电脑编号</th>
                                 <th>开始时间</th>
                                 <th>结束时间</th>
                             </tr>
@@ -139,7 +139,7 @@
                             <tr class="odd gradeX">
                                 <td><%=record.getRecordId()%></td>
                                 <td><%=user.getUserNick()%></td>
-                                <td><%=record.getComputerId()%></td>
+                                <td><%=record.getComputer().getLabId() + "-" + record.getComputerId()%></td>
                                 <td><%=record.getRecordStartTime()%></td>
                                 <% if (record.getRecordEndTime() == null) {%>
                                 <td>还未下机</td>
@@ -155,7 +155,6 @@
                         <div class="well">
                             <%--<h4>DataTables Usage Information</h4>--%>
                             <%--<p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>--%>
-                            <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>
                         </div>
                     </div>
                     <!-- /.panel-body -->

@@ -32,20 +32,20 @@ public class UserController extends BaseExceptionHandleAction implements Constan
     @RequestMapping("/")
     private String index(Model model) {
         System.out.println("index");
-        return "login.jsp";
+        return "/login";
     }
 
 
     @ResponseBody
     @RequestMapping("/register_action")
-    private String register_action(@RequestBody String requestJson, HttpServletRequest request) throws Exception{
+    private String register_action(@RequestBody String requestJson, HttpServletRequest request) throws Exception {
         System.out.println("!!!");
         System.out.println(requestJson);
         User user = new User();
         ObjectMapper mapper = new ObjectMapper();
         Map map = mapper.readValue(requestJson, Map.class);
         String userName = (String) map.get("userName");
-        String userPassword = (String) map.get("userPassword");
+        String userPassword = Tools.EncoderByMd5((String) map.get("userPassword"));
         String userNick  = (String) map.get("userNick");
         if (userDAO.query(userName) != null) {
             throw new BusinessException(ALERT_USER_NAME_ALREADY_EXIST);
@@ -77,7 +77,7 @@ public class UserController extends BaseExceptionHandleAction implements Constan
         if (user == null) {
             throw new BusinessException(ALERT_USER_NOT_EXIST);
         }
-        if (!userPassword.endsWith(user.getUserPassword())) {
+        if (!(Tools.EncoderByMd5(userPassword)).equals(user.getUserPassword())) {
             throw new BusinessException(ALERT_USER_WRONG_PASSWORD);
         }
         session.setAttribute(SESSION_USER, user);
@@ -100,7 +100,7 @@ public class UserController extends BaseExceptionHandleAction implements Constan
     @RequestMapping("/home/user")
     private String list(Model model) throws Exception {
         try {
-            model.addAttribute(ATTRIBUTE_USER_LIST, userDAO.queryList("", -1, -1));
+            model.addAttribute(ATTRIBUTE_USER_LIST, userDAO.queryList());
             return "/user.jsp";
         } catch (Exception e) {
             return "/error.jsp";

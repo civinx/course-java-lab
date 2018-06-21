@@ -17,5 +17,11 @@
     <property name="labGate">
       <column name="lab_gate" sql-type="int(11)" not-null="true" />
     </property>
+    <set name="LabUserByLabId" inverse="true">
+      <key>
+        <column name="lab_id" />
+      </key>
+      <one-to-many not-found="ignore" class="model.LabUser" />
+    </set>
   </class>
 </hibernate-mapping>
